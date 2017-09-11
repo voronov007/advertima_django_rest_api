@@ -1,0 +1,20 @@
+version: '1'
+
+services:
+  db:
+    image: postgres
+    env_file: ./environment
+    ports:
+    - "5432:5432"
+
+  web:
+    build: .
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    env_file: ./environment
+    environment:
+      - PORT=8000

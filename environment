@@ -1,0 +1,3 @@
+POSTGRES_USER=advertima_admin
+POSTGRES_DB=advertima_db
+POSTGRES_PASSWORD=supersecretpassword
