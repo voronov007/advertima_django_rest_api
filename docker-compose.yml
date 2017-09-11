@@ -1,20 +1,20 @@
-version: '1'
+version: '2'
 
 services:
-  db:
+  dashboard_db:
     image: postgres
     env_file: ./environment
     ports:
-    - "5432:5432"
+    - "5434:5432"
 
-  web:
+  advertima_web:
     build: .
     volumes:
       - .:/code
     ports:
-      - "8000:8000"
+      - "9000:9000"
     depends_on:
-      - db
+      - dashboard_db
     env_file: ./environment
     environment:
-      - PORT=8000
+      - PORT=9000
