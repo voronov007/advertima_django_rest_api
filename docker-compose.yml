@@ -4,8 +4,10 @@ services:
   dashboard_db:
     image: postgres
     env_file: ./environment
+    expose:
+      - "5434"
     ports:
-    - "5434:5432"
+      - "5434:5432"
 
   advertima_web:
     build: .
@@ -13,6 +15,8 @@ services:
       - .:/code
     ports:
       - "9000:9000"
+    links:
+      - dashboard_db
     depends_on:
       - dashboard_db
     env_file: ./environment

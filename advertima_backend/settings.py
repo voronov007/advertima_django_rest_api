@@ -80,8 +80,8 @@ DATABASES = {
         'NAME': os.getenv('POSTGRES_DB'),
         'USER': os.getenv('POSTGRES_USER'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-        'HOST': 'advertima_web',
-        'PORT': '5434',
+        'HOST': 'dashboard_db',
+        'PORT': '5432',
     }
 }
 
