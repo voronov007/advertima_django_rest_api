@@ -18,6 +18,11 @@ class Content(models.Model):
 
 
 class Person(models.Model):
+    device = models.ForeignKey(
+        Device,
+        on_delete=models.CASCADE,
+        related_name='persons'
+    )
     age = models.PositiveIntegerField()
 
     MALE = 'male'
@@ -27,6 +32,8 @@ class Person(models.Model):
         (FEMALE, 'Female'),
     )
     gender = models.CharField(max_length=7, choices=TYPE_CHOICES)
+    appear = models.DateTimeField()
+    disappear = models.DateTimeField()
 
     def __str__(self):
         return 'Person(pk="%s")' % self.pk
@@ -35,23 +42,12 @@ class Person(models.Model):
         return self.__str__()
 
 
-class PersonScene(models.Model):
-    person = models.ForeignKey(
-        Person,
-        on_delete=models.CASCADE,
-        related_name='scenes'
-    )
-    appear = models.DateTimeField()
-    disappear = models.DateTimeField()
-
-    def __str__(self):
-        return 'PersonScene(pk="%s")' % self.pk
-
-    def __repr__(self):
-        return self.__str__()
-
-
 class Event(models.Model):
+    device = models.ForeignKey(
+        Device,
+        on_delete=models.CASCADE,
+        related_name='events'
+    )
     person = models.ForeignKey(
         Person,
         on_delete=models.CASCADE,
