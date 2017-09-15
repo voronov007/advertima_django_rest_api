@@ -9,6 +9,14 @@ class Device(models.Model):
         return self.__str__()
 
 
+class Content(models.Model):
+    def __str__(self):
+        return 'Content(pk="%s")' % self.pk
+
+    def __repr__(self):
+        return self.__str__()
+
+
 class Person(models.Model):
     age = models.PositiveIntegerField()
 
@@ -27,18 +35,17 @@ class Person(models.Model):
         return self.__str__()
 
 
-class PersonAppear(models.Model):
+class PersonScene(models.Model):
     person = models.ForeignKey(
         Person,
         on_delete=models.CASCADE,
-        related_name='appears',
-        primary_key=True
+        related_name='scenes'
     )
     appear = models.DateTimeField()
     disappear = models.DateTimeField()
 
     def __str__(self):
-        return 'PersonAppear(pk="%s")' % self.pk
+        return 'PersonScene(pk="%s")' % self.pk
 
     def __repr__(self):
         return self.__str__()
@@ -48,8 +55,12 @@ class Event(models.Model):
     person = models.ForeignKey(
         Person,
         on_delete=models.CASCADE,
-        related_name='events',
-        primary_key=True
+        related_name='events'
+    )
+    content = models.ForeignKey(
+        Content,
+        on_delete=models.CASCADE,
+        related_name='events'
     )
     start = models.DateTimeField()
     end = models.DateTimeField(blank=True)
