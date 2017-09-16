@@ -33,3 +33,9 @@ restartdb:
 	docker-compose up -d
 	docker-compose restart advertima_web
 	docker-compose exec advertima_web python manage.py migrate
+
+loaddump:
+	docker-compose up -d db
+	sleep 3
+	docker-compose exec db bash -c "pg_restore --verbose --clean --no-acl
+	--no-owner -U advertima_admin -d advertima_db /dumps/dump.sql"

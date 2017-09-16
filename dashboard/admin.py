@@ -26,14 +26,14 @@ class PersonAdmin(admin.ModelAdmin):
     list_display = (
         'id', 'gender', 'age'
     )
-    list_filter = ('id', 'gender', 'age')
+    list_filter = ('gender', 'age')
     list_display_links = ('id', )
 
 
-@admin.register(Event)
-class EventAdmin(admin.ModelAdmin):
+@admin.register(DeviceContent)
+class DeviceContentAdmin(admin.ModelAdmin):
     list_display = (
-        'id', 'start', 'end'
+        'id', 'start_time', 'end_time'
     )
     list_filter = ('id', )
     list_display_links = ('id', )

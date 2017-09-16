@@ -3,6 +3,8 @@ version: '2'
 services:
   dashboard_db:
     image: postgres
+    volumes:
+      - ./dumps:/dumps
     env_file: ./environment
     expose:
       - "5434"
