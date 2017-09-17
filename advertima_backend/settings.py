@@ -113,6 +113,7 @@ TIME_ZONE = 'UTC'
 USE_I18N = False
 USE_L10N = False
 USE_TZ = False
+TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 
 
 # Static files (CSS, JavaScript, Images)

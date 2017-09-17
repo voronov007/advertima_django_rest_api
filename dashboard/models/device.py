@@ -9,7 +9,7 @@ __all__ = ['Device', 'DeviceContent']
 class Device(models.Model):
     contents = models.ManyToManyField(
         Content, through='DeviceContent', related_name='devices')
-    device_id = models.PositiveIntegerField()
+    device_id = models.PositiveIntegerField(unique=True)
 
     def __str__(self):
         return 'Device(pk="%s")' % self.pk

@@ -6,13 +6,12 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "advertima_backend.settings")
 import django
 django.setup()
 from django.contrib.auth.models import User
+from django.conf import settings
 
 from dashboard.models import *
 
 
 PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
-TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-
 
 class Generator:
     def create_admin(self):
@@ -36,7 +35,8 @@ class Generator:
                     device_id=row[device_id_col])
                 content, _ = Content.objects.get_or_create(
                     content_id=row[content_id_col])
-                event_time = datetime.strptime(row[event_time_col], TIME_FORMAT)
+                event_time = datetime.strptime(
+                    row[event_time_col], settings.TIME_FORMAT)
                 event_type = row[event_type_col]
                 if event_type == 'start':
                     DeviceContent.objects.create(
@@ -64,8 +64,10 @@ class Generator:
                 device, _ = Device.objects.get_or_create(
                     device_id=row[device_id_col])
                 age = int(row[age_col])
-                appear = datetime.strptime(row[appears_col], TIME_FORMAT)
-                disappear = datetime.strptime(row[disappears_col], TIME_FORMAT)
+                appear = datetime.strptime(
+                    row[appears_col], settings.TIME_FORMAT)
+                disappear = datetime.strptime(
+                    row[disappears_col], settings.TIME_FORMAT)
                 gender = row[gender_col]
                 persons.append(
                     Person(
