@@ -21,8 +21,8 @@ class Person(models.Model):
         (FEMALE, 'Female'),
     )
     gender = models.CharField(max_length=7, choices=TYPE_CHOICES)
-    appear = models.DateTimeField()
-    disappear = models.DateTimeField()
+    appear = models.DateTimeField(db_index=True)
+    disappear = models.DateTimeField(db_index=True)
 
     def __str__(self):
         return 'Person(pk="%s", gender="%s", age="%s")' % (

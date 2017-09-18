@@ -7,7 +7,7 @@ You need to have installed such packages:
 - docker-compose
 
 ## Build and start project
-`make init`
+Go to the project folder and run command: `make init`
 
 ## Description
 - It is a Django 1.11.5 web application with Django ORM

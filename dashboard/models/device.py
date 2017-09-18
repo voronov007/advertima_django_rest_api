@@ -22,8 +22,8 @@ class DeviceContent(models.Model):
     device = models.ForeignKey(Device, on_delete=models.CASCADE)
     content = models.ForeignKey(Content, on_delete=models.CASCADE)
 
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField(blank=True, null=True)
+    start_time = models.DateTimeField(db_index=True,)
+    end_time = models.DateTimeField(db_index=True, blank=True, null=True)
 
     def __str__(self):
         return 'DeviceContent(pk="%s", device="%s", content="%s", start="%s", ' \

@@ -29,9 +29,11 @@ def viewer_count(request):
 
     viewers = 0
     for el in device_content:
+        # clarify time ranges for each device-content
         start_time = el.start_time if el.start_time > start else start
         end_time = el.end_time if el.end_time < end else end
 
+        # get persons by time range of each device-content event
         viewers += Person.objects.filter(
             device__id=device_id,
             appear__range=(start_time, end_time),
@@ -70,9 +72,11 @@ def avg_age(request):
     total_count = 0
     total_sum = 0
     for el in device_content:
+        # clarify time ranges for each device-content
         start_time = el.start_time if el.start_time > start else start
         end_time = el.end_time if el.end_time < end else end
 
+        # get aggregated dict of values by time range of each device-content
         aggregation = Person.objects.filter(
             device__id=device_id,
             appear__range=(start_time, end_time),
@@ -118,9 +122,11 @@ def gender_dist(request):
     male_count = 0
     female_count = 0
     for el in device_content:
+        # clarify time ranges for each device-content
         start_time = el.start_time if el.start_time > start else start
         end_time = el.end_time if el.end_time < end else end
 
+        # get aggregated QuerySet by time range of each device-content
         aggregation = Person.objects.filter(
             device__id=device_id,
             appear__range=(start_time, end_time),
