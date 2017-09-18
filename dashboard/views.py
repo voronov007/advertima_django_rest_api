@@ -27,7 +27,6 @@ def viewer_count(request):
     if not device_content.exists():
         return JsonResponse({'error': 'Device with content were not found'})
 
-    # device = Device.objects.get(device_id=device_id)
     viewers = 0
     for el in device_content:
         start_time = el.start_time if el.start_time > start else start
@@ -39,8 +38,6 @@ def viewer_count(request):
             disappear__range=(start_time, end_time)
         ).count()
 
-    # content = get_object_or_404(Content, pk=content_id)
-    # return JsonResponse({'content': content_id})
     return JsonResponse({
         "start": start.strftime(settings.TIME_FORMAT),
         "end": end.strftime(settings.TIME_FORMAT),
@@ -70,7 +67,6 @@ def avg_age(request):
     if not device_content.exists():
         return JsonResponse({'error': 'Device with content were not found'})
 
-    # device = Device.objects.get(device_id=device_id)
     total_count = 0
     total_sum = 0
     for el in device_content:
@@ -82,10 +78,12 @@ def avg_age(request):
             appear__range=(start_time, end_time),
             disappear__range=(start_time, end_time)
         ).all().aggregate(Sum('age'), Count('age'))
+
         total_count += aggregation.get('age__count', 0)
         current_sum = aggregation.get('age__sum')
         current_sum = current_sum if current_sum else 0
         total_sum += current_sum
+
     average_age = 0 if total_count == 0 else total_sum/(total_count*1.0)
 
     return JsonResponse({
@@ -127,18 +125,30 @@ def gender_dist(request):
             device__id=device_id,
             appear__range=(start_time, end_time),
             disappear__range=(start_time, end_time)
-        ).all().values('gender')
-        print(aggregation)
-    #     total_count += aggregation.get('age__count', 0)
-    #     current_sum = aggregation.get('age__sum')
-    #     current_sum = current_sum if current_sum else 0
-    #     total_sum += current_sum
-    # average_age = 0 if total_count == 0 else total_sum/(total_count*1.0)
+        ).all().values('gender').annotate(count=Count('gender')).distinct()
+
+        if aggregation.exists():
+            for item in aggregation:
+                gender = item['gender']
+                if gender == Person.MALE:
+                    male_count += item['count']
+                else:
+                    female_count += item['count']
+
+    total_count = male_count + female_count
+    if total_count == 0:
+        male_weight = 0
+        female_weight = 0
+    else:
+        male_weight = male_count/(total_count*1.0)
+        male_weight = round(male_weight, 2)
+        female_weight = female_count/(total_count*1.0)
+        female_weight = round(female_weight, 2)
 
     return JsonResponse({
         "start": start.strftime(settings.TIME_FORMAT),
         "end": end.strftime(settings.TIME_FORMAT),
         "device_id": device_id,
         "content_id": content_id,
-        "gender-dist": {'male': 0, 'female': 0}
+        "gender-dist": {'male': male_weight, 'female': female_weight}
     })

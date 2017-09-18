@@ -12,7 +12,7 @@ class Device(models.Model):
     device_id = models.PositiveIntegerField(unique=True)
 
     def __str__(self):
-        return 'Device(pk="%s")' % self.pk
+        return 'Device(pk="%s", device_id="%s")' % (self.pk, self.device_id)
 
     def __repr__(self):
         return self.__str__()
@@ -26,31 +26,10 @@ class DeviceContent(models.Model):
     end_time = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
-        return 'DeviceContent(pk="%s")' % self.pk
+        return 'DeviceContent(pk="%s", device="%s", content="%s", start="%s", ' \
+               'end="%s")' % (self.pk, self.device.device_id,
+                              self.content.content_id, self.start_time,
+                              self.end_time)
 
     def __repr__(self):
         return self.__str__()
-# class Event(models.Model):
-#     device = models.ForeignKey(
-#         Device,
-#         on_delete=models.CASCADE,
-#         related_name='events'
-#     )
-#     person = models.ForeignKey(
-#         Person,
-#         on_delete=models.CASCADE,
-#         related_name='events'
-#     )
-#     content = models.ForeignKey(
-#         Content,
-#         on_delete=models.CASCADE,
-#         related_name='events'
-#     )
-#     start = models.DateTimeField()
-#     end = models.DateTimeField(blank=True)
-#
-#     def __str__(self):
-#         return 'Event(pk="%s")' % self.pk
-#
-#     def __repr__(self):
-#         return self.__str__()

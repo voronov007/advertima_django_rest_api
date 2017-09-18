@@ -25,7 +25,8 @@ class Person(models.Model):
     disappear = models.DateTimeField()
 
     def __str__(self):
-        return 'Person(pk="%s")' % self.pk
+        return 'Person(pk="%s", gender="%s", age="%s")' % (
+            self.pk, self.gender, self.age)
 
     def __repr__(self):
         return self.__str__()

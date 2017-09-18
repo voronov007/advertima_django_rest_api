@@ -1,7 +1,16 @@
-all:
+start:
 	docker-compose up -d
 	docker-compose restart advertima_web
 	docker-compose ps
+
+init:
+	docker-compose build
+	docker-compose up -d
+	docker-compose restart advertima_web
+	docker-compose ps
+	sleep 3
+	docker-compose exec advertima_web python manage.py migrate
+	docker-compose exec dashboard_db bash -c "psql -d advertima_db -U advertima_admin -f /dumps/dump.sql"
 
 django:
 	docker-compose restart advertima_web
@@ -37,5 +46,4 @@ restartdb:
 loaddump:
 	docker-compose up -d db
 	sleep 3
-	docker-compose exec db bash -c "pg_restore --verbose --clean --no-acl
-	--no-owner -U advertima_admin -d advertima_db /dumps/dump.sql"
+	docker-compose exec db bash -c "pg_restore --verbose --clean --no-acl --no-owner -U advertima_admin -d advertima_db /dumps/dump.sql"
