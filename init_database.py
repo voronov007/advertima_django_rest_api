@@ -88,7 +88,7 @@ class Generator:
                 device_id = int(row[device_id_col])
                 device = devices.get(device_id)
                 if not device:
-                    device = Device.objects.create(device_id=device_id)
+                    device, _ = Device.objects.get_or_create(device_id=device_id)
                     devices[device_id] = device
 
                 age = int(row[age_col])
