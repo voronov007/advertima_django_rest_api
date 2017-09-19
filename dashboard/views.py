@@ -3,7 +3,7 @@ from django.http.response import JsonResponse
 from django.db.models import Sum, Count
 
 from .models import *
-from .utils.viiews_utils import check_params
+from .utils.viiews_utils import check_params, get_device_content
 
 
 def viewer_count(request):
@@ -18,12 +18,7 @@ def viewer_count(request):
     device_id = params.get('device')
     content_id = params.get('content')
 
-    device_content = DeviceContent.objects.filter(
-        device__id=device_id,
-        content__id=content_id,
-        start_time__range=(start, end),
-        end_time__range=(start, end)
-    ).order_by('start_time')
+    device_content = get_device_content(device_id, content_id, start, end)
     if not device_content.exists():
         return JsonResponse({'error': 'Device with content were not found'})
 
@@ -36,8 +31,8 @@ def viewer_count(request):
         # get persons by time range of each device-content event
         viewers += Person.objects.filter(
             device__id=device_id,
-            appear__range=(start_time, end_time),
-            disappear__range=(start_time, end_time)
+            appear__lte=end_time,
+            disappear__gte=start_time
         ).count()
 
     return JsonResponse({
@@ -60,12 +55,7 @@ def avg_age(request):
     device_id = params.get('device')
     content_id = params.get('content')
 
-    device_content = DeviceContent.objects.filter(
-        device__id=device_id,
-        content__id=content_id,
-        start_time__range=(start, end),
-        end_time__range=(start, end)
-    ).order_by('start_time')
+    device_content = get_device_content(device_id, content_id, start, end)
     if not device_content.exists():
         return JsonResponse({'error': 'Device with content were not found'})
 
@@ -79,8 +69,8 @@ def avg_age(request):
         # get aggregated dict of values by time range of each device-content
         aggregation = Person.objects.filter(
             device__id=device_id,
-            appear__range=(start_time, end_time),
-            disappear__range=(start_time, end_time)
+            appear__lte=end_time,
+            disappear__gte=start_time
         ).all().aggregate(Sum('age'), Count('age'))
 
         total_count += aggregation.get('age__count', 0)
@@ -110,12 +100,7 @@ def gender_dist(request):
     device_id = params.get('device')
     content_id = params.get('content')
 
-    device_content = DeviceContent.objects.filter(
-        device__id=device_id,
-        content__id=content_id,
-        start_time__range=(start, end),
-        end_time__range=(start, end)
-    ).order_by('start_time')
+    device_content = get_device_content(device_id, content_id, start, end)
     if not device_content.exists():
         return JsonResponse({'error': 'Device with content were not found'})
 
@@ -128,9 +113,9 @@ def gender_dist(request):
 
         # get aggregated QuerySet by time range of each device-content
         aggregation = Person.objects.filter(
-            device__id=device_id,
-            appear__range=(start_time, end_time),
-            disappear__range=(start_time, end_time)
+            device__device_id=device_id,
+            appear__lte=end_time,
+            disappear__gte=start_time
         ).all().values('gender').annotate(count=Count('gender')).distinct()
 
         if aggregation.exists():

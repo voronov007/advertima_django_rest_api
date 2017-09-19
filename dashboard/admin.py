@@ -33,8 +33,14 @@ class PersonAdmin(admin.ModelAdmin):
 @admin.register(DeviceContent)
 class DeviceContentAdmin(admin.ModelAdmin):
     list_display = (
-        'id', 'start_time', 'end_time'
+        'id', 'get_device_id', 'get_content_id', 'start_time', 'end_time'
     )
-    list_filter = ('id', )
+    list_filter = ('device__device_id', 'content__content_id', )
     list_display_links = ('id', )
+
+    def get_device_id(self, obj):
+        return obj.device.device_id
+
+    def get_content_id(self, obj):
+        return obj.content.content_id
 

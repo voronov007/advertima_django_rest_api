@@ -3,6 +3,9 @@ start:
 	docker-compose restart advertima_web
 	docker-compose ps
 
+stop:
+	docker-compose stop
+
 init:
 	docker-compose build
 	docker-compose up -d
@@ -44,5 +47,5 @@ restartdb:
 	docker-compose exec advertima_web python manage.py migrate
 
 dump:
-	docker-compose exec dashboard_db bash -c "pg_dump -U advertima_admin -d advertima_db > /dumps/dump2.sql"
+	docker-compose exec dashboard_db bash -c "pg_dump -U advertima_admin -d advertima_db > /dumps/dump.sql"
 
