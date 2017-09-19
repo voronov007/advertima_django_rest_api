@@ -30,7 +30,7 @@ def viewer_count(request):
 
         # get persons by time range of each device-content event
         viewers += Person.objects.filter(
-            device__id=device_id,
+            device__device_id=device_id,
             appear__lte=end_time,
             disappear__gte=start_time
         ).count()
@@ -68,7 +68,7 @@ def avg_age(request):
 
         # get aggregated dict of values by time range of each device-content
         aggregation = Person.objects.filter(
-            device__id=device_id,
+            device__device_id=device_id,
             appear__lte=end_time,
             disappear__gte=start_time
         ).all().aggregate(Sum('age'), Count('age'))
