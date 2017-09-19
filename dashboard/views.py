@@ -85,7 +85,7 @@ def avg_age(request):
         "end": end.strftime(settings.TIME_FORMAT),
         "device_id": device_id,
         "content_id": content_id,
-        "avg_age": average_age})
+        "avg_age": round(average_age, 2)})
 
 
 def gender_dist(request):
